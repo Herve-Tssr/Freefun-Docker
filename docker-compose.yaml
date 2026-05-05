@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  web:
+    build: . # Construit l’image Docker à partir du Dockerfile présent dans le dossier courant
+    ports:
+      - "80:80"
+    container_name: freefun_web
+    restart: always
