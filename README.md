@@ -1,4 +1,4 @@
-# 🚀 Déploiement d’un site web avec Docker et Nginx
+# Déploiement d'un site web conteneurisé — FreeFun
 
 <p align="center">
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
@@ -7,155 +7,99 @@
   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white"/>
 </p>
 
----
-
-## 📌 Contexte
-
-La société FreeFun souhaite déployer son site web dans un environnement conteneurisé.
-L’objectif de ce projet est de simuler ce déploiement à l’aide de Docker sur une machine virtuelle Linux.
+<p align="center">
+  <em>Projet réalisé dans le cadre de la formation TSSR (RNCP niveau 5)</em>
+</p>
 
 ---
 
-## 🧠 Choix techniques et réflexion
+## Contexte
 
-### 🖥️ Choix de l’OS : Ubuntu Server minimal
-
-**Pourquoi :**
-
-* système léger → optimisation des ressources
-* environnement proche d’un serveur réel
-* installation uniquement des services nécessaires
+La société FreeFun souhaite héberger son site web dans un environnement conteneurisé.
+Ce projet simule ce déploiement sur une machine virtuelle Linux, en se rapprochant
+des pratiques utilisées en entreprise.
 
 ---
 
-### 🐳 Choix de Docker
+## Stack technique et justifications
 
-**Pourquoi :**
-
-* déploiement rapide et simplifié
-* isolation des services
-* reproductibilité de l’environnement
-* standard largement utilisé en entreprise
-
----
-
-### 🌐 Choix de Nginx
-
-**Pourquoi :**
-
-* serveur web léger et performant
-* adapté aux sites statiques
-* très utilisé en production
+| Composant | Rôle | Justification |
+|---|---|---|
+| **Ubuntu Server minimal** | OS de la VM hôte | Système léger, proche d'un serveur réel, maîtrise totale des services installés |
+| **Docker** | Conteneurisation | Isolation, portabilité, reproductibilité — standard entreprise |
+| **Dockerfile** | Construction de l'image | Intègre le site directement dans l'image, indépendant du système hôte |
+| **Docker Compose** | Orchestration | Automatise le déploiement en une commande, configuration déclarative |
+| **Nginx** | Serveur web | Léger, performant, adapté aux sites statiques, très utilisé en production |
 
 ---
 
-### 🧱 Utilisation d’un Dockerfile
-
-**Pourquoi :**
-
-* intégrer directement le site dans l’image
-* rendre le projet portable
-* éviter les dépendances au système hôte
-
----
-
-### ⚙️ Utilisation de Docker Compose
-
-**Pourquoi :**
-
-* automatiser le déploiement
-* simplifier les commandes
-* garantir une exécution reproductible
+## Structure du projet
+freefun-docker/
+├── site/                  # Fichiers sources du site web
+├── Dockerfile             # Construction de l'image personnalisée
+├── docker-compose.yml     # Définition et orchestration du service
+└── README.md
 
 ---
 
-### 📁 Organisation du projet
+## Déploiement
 
-Le projet est structuré de manière claire :
-
-* `site/` → fichiers du site web
-* `Dockerfile` → construction de l’image
-* `docker-compose.yml` → orchestration
-
-**Objectif :**
-
-* lisibilité
-* maintenance facilitée
-* approche professionnelle
-
----
-
-## ⚙️ Déploiement
-
-### 📥 Cloner le projet
+**1. Cloner le dépôt**
 
 ```bash
 git clone https://github.com/TON_USER/freefun-docker.git
 cd freefun-docker
 ```
 
----
-
-### 🚀 Lancer le service
+**2. Construire et lancer le service**
 
 ```bash
 docker-compose up -d --build
 ```
 
----
-
-## 🌐 Accès au site
-
-Le site est accessible via l’adresse IP de la machine virtuelle :
-
-```
+**3. Accéder au site**
 http://IP_DE_LA_VM
-```
 
 ---
 
-## 📁 Structure du projet
+## Preuves de fonctionnement
 
-```
-freefun-docker/
-├── site/
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
-```
+### Site accessible
 
----
+![Site en ligne](images/site.png)
 
-## 📸 Preuve de fonctionnement
+### Conteneur actif (`docker ps`)
 
-### 🌐 Site en ligne
-![Site](images/site.png)
+![Docker ps](images/docker-ps.png)
 
-### 🐳 Conteneur actif
-![Docker](images/docker-ps.png)
+### Démarrage Docker Compose
 
-### ⚙️ Docker Compose
-![Compose](images/compose.png)
+![Docker Compose up](images/compose.png)
 
 ---
 
-## ⚠️ Problèmes rencontrés
+## Problèmes rencontrés et résolutions
 
-* 🔧 Problème de résolution DNS lors de l’installation
-* 📦 Outils absents sur Ubuntu minimal (ping, nano)
-* 🔀 Différence entre `docker compose` et `docker-compose`
-
----
-
-## 🧠 Conclusion
-
-Ce projet m’a permis de comprendre le fonctionnement de Docker et de la conteneurisation.
-J’ai pu mettre en place un environnement proche d’un cas réel en entreprise, en automatisant le déploiement d’un site web.
-
-L’utilisation de Docker Compose permet de simplifier les manipulations et de garantir un déploiement rapide, reproductible et maintenable.
+| Problème | Cause | Solution appliquée |
+|---|---|---|
+| Résolution DNS absente | Configuration réseau manquante sur Ubuntu minimal | Ajout manuel des DNS dans `/etc/resolv.conf` |
+| Outils absents (`ping`, `nano`) | Image Ubuntu minimale sans paquets additionnels | Installation via `apt install` après résolution DNS |
+| Commande `docker-compose` inconnue | Docker v2 utilise `docker compose` (plugin intégré) | Identification de la version installée, adaptation de la syntaxe |
 
 ---
 
-## 👨‍💻 Auteur
+## Bilan
 
-Projet réalisé dans le cadre de la formation TSSR
+Ce projet m'a permis de déployer une application web conteneurisée de bout en bout :
+configuration de la VM, construction d'une image Docker personnalisée, serveur Nginx,
+et automatisation via Docker Compose.
+
+Les difficultés rencontrées — résolution DNS, environnement minimal, gestion des versions
+de Docker — m'ont conduit à diagnostiquer et résoudre des problèmes concrets
+d'infrastructure, directement transférables en situation professionnelle.
+
+---
+
+## Auteur
+
+**Projet réalisé dans le cadre de la formation TSSR (RNCP niveau 5)**
